@@ -1,5 +1,12 @@
 package pl.goeuro.bus;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,5 +23,28 @@ class DirectRouteVerifier {
 	@PostConstruct
 	private void postConstruct(){
 		log.info("File path: {}", routesFilePath);
+		verify("0", "4");
+	}
+
+	boolean verify(String start, String end){
+		long startTime = System.nanoTime();
+		log.debug("Try to find router for between stations: {} - {}", start, end);
+		Path file = Paths.get(routesFilePath);
+		try
+		{
+			Stream<String> lines = Files.lines( file, StandardCharsets.UTF_8 );
+			final String totalRows = lines.findFirst().get();
+			log.info("Total rows in file : {}", totalRows);
+			for(String line : (Iterable<String>)lines::iterator){
+				log.info(line);
+			}
+		} catch (IOException ex){
+			log.error("Error while reading file with routes: {}", ex);
+		}
+
+		long endTime = System.nanoTime();
+		long elapsedTimeInMillis = TimeUnit.MILLISECONDS.convert((endTime - startTime), TimeUnit.NANOSECONDS);
+		log.info("Total elapsed time: " + elapsedTimeInMillis + " ms");
+		return false;
 	}
 }
