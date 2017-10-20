@@ -10,11 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 class DirectRouteVerifier {
 
-	@Value("$routes.file.path")
+	@Value("${routes.file.path}")
 	private String routesFilePath;
 
 	@PostConstruct
 	private void postConstruct(){
-		log.debug("File path: {}", routesFilePath);
+		log.info("File path: {}", routesFilePath);
 	}
 }
