@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,48 +18,50 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 class DirectRouteVerifier {
 
-	@Value("${routes.file.path}")
-	private String routesFilePath;
+    @Value("${routes.file.path}")
+    private String routesFilePath;
 
-	@PostConstruct
-	private void postConstruct(){
-		log.info("File path: {}", routesFilePath);
-		verify("0", "5");
-	}
+    @PostConstruct
+    private void postConstruct() {
+        log.info("File path: {}", routesFilePath);
+    }
 
-	boolean verify(String start, String end){
-		long startTime = System.nanoTime();
-		log.debug("Try to find router for between stations: {} - {}", start, end);
-		Path file = Paths.get(routesFilePath);
-		try
-		{
-			Stream<String> lines = Files.lines( file, StandardCharsets.UTF_8 ).skip(1);
-			//final String totalRows = lines.findFirst().get();
-			//log.info("Total rows in file : {}", totalRows);
-			for(String line : (Iterable<String>)lines::iterator){
-				final String[] lineElements = line.split(" ");
-				boolean foundStart = false;
-				String searchElement = start;
-				for(int i =1 ; i< lineElements.length; i++){
+    Route verify(int departureStationId, int arrivalStationId) {
+        String departure = String.valueOf(departureStationId);
+        String arrival = String.valueOf(arrivalStationId);
+        log.debug("Try to find router for between stations: {} - {}", departure, arrival);
+        Path filePath = Paths.get(routesFilePath);
+        boolean foundDirectRoute = false;
+        try {
+            foundDirectRoute = Files.lines(filePath, StandardCharsets.UTF_8)
+                    .skip(1)
+                    .map(route -> route.split(" "))
+                    .anyMatch(route -> findRoute(route, departure, arrival));
 
-					if(lineElements[i].equals(searchElement)){
-						if(foundStart){
-							log.info("Found route");
-							return true;
-						}
-						searchElement = end;
-						foundStart = true;
-					}
-				}
-				log.info(line);
-			}
-		} catch (IOException ex){
-			log.error("Error while reading file with routes: {}", ex);
-		}
+        } catch (IOException ex) {
+            log.error("Error while reading file with routes: {}", ex);
+        }
 
-		long endTime = System.nanoTime();
-		long elapsedTimeInMillis = TimeUnit.MILLISECONDS.convert((endTime - startTime), TimeUnit.NANOSECONDS);
-		log.info("Total elapsed time: " + elapsedTimeInMillis + " ms");
-		return false;
-	}
+        return Route.builder()
+                .arrivalStationId(departureStationId)
+                .departureStationId(arrivalStationId)
+                .directBusRoute(foundDirectRoute)
+                .build();
+    }
+
+    private boolean findRoute(String[] busStations, String departure, String arrival) {
+        boolean alreadyFoundDeparture = false;
+        String stationToFind = departure;
+        for (int i = 1; i < busStations.length; i++) {
+            if (busStations[i].equals(stationToFind)) {
+                if (alreadyFoundDeparture) {
+                    log.info("Found route for departure:{}, arrival: {}", departure, arrival);
+                    return true;
+                }
+                stationToFind = arrival;
+                alreadyFoundDeparture = true;
+            }
+        }
+        return false;
+    }
 }

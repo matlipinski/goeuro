@@ -5,7 +5,7 @@
 
 	<groupId>pl.goeuro</groupId>
 	<artifactId>bus</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
 	<name>bus</name>
@@ -27,7 +27,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jersey</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
 		<dependency>
@@ -43,6 +43,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>bus</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
