@@ -1,17 +1,9 @@
 package pl.goeuro.bus;
 
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.util.Maps;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.internal.util.collections.Sets;
-import org.mockito.stubbing.Answer;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -64,10 +56,10 @@ public class DirectRouteVerifierTest {
         Map<Integer, TreeSet<Integer>> routes = new HashMap<>();
         routes.put(0, new TreeSet<>(Arrays.asList(0,2)));
         routes.put(1, new TreeSet<>(Arrays.asList(0,1)));
-        routes.put(2, new TreeSet<>(Arrays.asList(0)));
+        routes.put(2, new TreeSet<>(Collections.singletonList(0)));
         routes.put(3, new TreeSet<>(Arrays.asList(0,1)));
         routes.put(4, new TreeSet<>(Arrays.asList(0,2)));
-        routes.put(5, new TreeSet<>(Arrays.asList(1)));
+        routes.put(5, new TreeSet<>(Collections.singletonList(1)));
         routes.put(6, new TreeSet<>(Arrays.asList(1,2)));
         return routes;
     }
