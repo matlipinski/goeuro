@@ -43,7 +43,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>bus</finalName>
+		<finalName>bus-route-verifier</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
