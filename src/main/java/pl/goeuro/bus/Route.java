@@ -1,11 +1,13 @@
 package pl.goeuro.bus;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 
-@AllArgsConstructor
-@Builder
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@Getter
 class Route {
 
     @JsonProperty("dep_sid")

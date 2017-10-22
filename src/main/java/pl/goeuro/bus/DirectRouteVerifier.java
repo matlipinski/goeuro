@@ -15,7 +15,7 @@ class DirectRouteVerifier {
     private final RouteRepository routeRepository;
 
     @Autowired
-    public DirectRouteVerifier(RouteRepository routeRepository) {
+    DirectRouteVerifier(RouteRepository routeRepository) {
         this.routeRepository = routeRepository;
     }
 

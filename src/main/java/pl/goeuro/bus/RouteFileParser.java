@@ -1,5 +1,8 @@
 package pl.goeuro.bus;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor
 @Slf4j
 class RouteFileParser {
     private final static Pattern SPACE_REGEXP = Pattern.compile("\\s+");

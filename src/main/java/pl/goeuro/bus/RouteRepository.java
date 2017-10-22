@@ -18,7 +18,7 @@ class RouteRepository {
 
 
     @Autowired
-    public RouteRepository(RouteFileParser routeFileParser) {
+    RouteRepository(RouteFileParser routeFileParser) {
         this.routeFileParser = routeFileParser;
     }
 
